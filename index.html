@@ -10,54 +10,82 @@
         }
 
         .navbar {
-            padding: 10px;
-            width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
+            padding: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .nav-links {
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
             display: none;
             position: fixed;
             top: 60px;
             left: 0;
-            right: 0;
-            width: 100vw;
+            width: 100%;
             background: rgba(0,0,0,0.95);
-            padding: 15px 0;
-            margin: 0;
+            padding: 20px 0;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
 
         .nav-links.active {
             display: flex;
         }
 
-        .menu-toggle {
+        .hamburger {
             display: block;
-            position: absolute;
-            right: 15px;
-            top: 15px;
+            width: 30px;
+            height: 20px;
+            position: relative;
             cursor: pointer;
             z-index: 1001;
         }
 
-        .menu-toggle span {
+        .hamburger span {
             display: block;
-            width: 25px;
+            position: absolute;
             height: 2px;
+            width: 100%;
             background: #fff;
-            margin: 4px 0;
-            transition: 0.3s;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 0;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 9px;
+        }
+
+        .hamburger span:nth-child(3) {
+            top: 18px;
+        }
+
+        /* Animasi hamburger saat aktif */
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 9px;
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 9px;
         }
 
         .hero {
             padding: 0;
             margin: 0;
-            width: 100vw;
+            width: 100%;
             min-height: 100vh;
             overflow: hidden;
         }
@@ -65,21 +93,43 @@
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.querySelector('.menu-toggle');
+        const hamburger = document.createElement('div');
+        hamburger.className = 'hamburger';
+        hamburger.innerHTML = `
+            <span></span>
+            <span></span>
+            <span></span>
+        `;
+        
+        const navbar = document.querySelector('.navbar');
         const navLinks = document.querySelector('.nav-links');
         
-        menuToggle.addEventListener('click', function() {
+        // Masukkan hamburger ke navbar
+        navbar.insertBefore(hamburger, navLinks);
+
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
             navLinks.classList.toggle('active');
         });
 
         // Menutup menu saat link diklik
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
             });
         });
+
+        // Menutup menu saat scroll
+        window.addEventListener('scroll', () => {
+            if(navLinks.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
     });
 </script>
+
 
 
 <html lang="id">
