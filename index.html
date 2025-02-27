@@ -1,36 +1,21 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
+    /* Mobile Responsive Styles */
     @media screen and (max-width: 768px) {
-        body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
         .navbar {
             padding: 15px;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end; /* Mengubah ke flex-end agar hamburger di kanan */
-            align-items: center;
-            background: rgba(0,0,0,0.9);
         }
 
         .nav-links {
-            display: none;
-            position: absolute; /* Diubah ke absolute */
-            top: 100%; /* Posisi tepat di bawah navbar */
+            display: none; /* Hide default nav links */
+            flex-direction: column;
+            position: fixed;
+            top: 70px;
             left: 0;
             width: 100%;
-            background: rgba(0,0,0,0.95);
-            padding: 0;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-            transition: all 0.3s ease;
-            z-index: 999;
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            text-align: center;
         }
 
         .nav-links.active {
@@ -38,131 +23,60 @@
         }
 
         .nav-links a {
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin: 10px 0;
+            font-size: 1em;
         }
 
-        .nav-links a:last-child {
-            border-bottom: none;
-        }
-
+        /* Hamburger Menu */
         .hamburger {
             display: block;
+            position: absolute;
+            right: 20px;
+            top: 20px;
             width: 30px;
             height: 20px;
-            position: relative;
             cursor: pointer;
-            margin-right: 15px;
-            z-index: 1001;
         }
 
         .hamburger span {
             display: block;
-            position: absolute;
-            height: 3px; /* Sedikit lebih tebal */
             width: 100%;
+            height: 2px;
             background: #fff;
-            border-radius: 3px;
-            transition: all 0.3s ease;
+            margin: 6px 0;
+            transition: 0.4s;
         }
 
-        .hamburger span:nth-child(1) {
-            top: 0;
-        }
-
-        .hamburger span:nth-child(2) {
-            top: 8px;
-        }
-
-        .hamburger span:nth-child(3) {
-            top: 16px;
-        }
-
+        /* Hamburger Animation */
         .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg);
-            top: 8px;
+            transform: rotate(45deg) translate(7px, 7px);
         }
 
         .hamburger.active span:nth-child(2) {
             opacity: 0;
-            transform: translateX(-20px);
         }
 
         .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg);
-            top: 8px;
-        }
-
-        .hero {
-            padding-top: 60px; /* Memberikan ruang untuk navbar fixed */
-            margin: 0;
-            width: 100%;
-            min-height: 100vh;
-            overflow: hidden;
+            transform: rotate(-45deg) translate(7px, -7px);
         }
     }
 </style>
+
+<div class="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Buat container untuk hamburger
-        const hamburgerContainer = document.createElement('div');
-        hamburgerContainer.style.position = 'relative';
-        
-        const hamburger = document.createElement('div');
-        hamburger.className = 'hamburger';
-        hamburger.innerHTML = `
-            <span></span>
-            <span></span>
-            <span></span>
-        `;
-        
-        const navbar = document.querySelector('.navbar');
+    function toggleMenu() {
         const navLinks = document.querySelector('.nav-links');
-        
-        // Masukkan hamburger ke container
-        hamburgerContainer.appendChild(hamburger);
-        
-        // Masukkan container ke navbar
-        navbar.insertBefore(hamburgerContainer, navLinks);
-
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation(); // Mencegah event bubbling
-            this.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Menutup menu saat klik di luar menu
-        document.addEventListener('click', function(e) {
-            if (!navbar.contains(e.target) && navLinks.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
-
-        // Menutup menu saat link diklik
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // Menutup menu saat scroll
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > lastScroll && navLinks.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-            
-            lastScroll = currentScroll;
-        });
-    });
+        const hamburger = document.querySelector('.hamburger');
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    }
 </script>
+
 
 
 
